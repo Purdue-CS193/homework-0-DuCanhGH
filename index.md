@@ -1,37 +1,56 @@
-## Welcome to GitHub Pages
+# Ngo Duc Anh's First CS193 Homework
 
-You can use the [editor on GitHub](https://github.com/kalutes/CS193_Fall18_Lab1/edit/master/index.md) to maintain and preview the content for your website in Markdown files.
+## Favorite things about CS193:
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+- Teaching freshmen, most of which are probably Mac or Windows users, how to use Git and Unix commands (stuff that will matter).
 
-### Markdown
+  - Will the class be filled with "I use Arch btw" at the end of the semester?
+  
+    - I use NixOS btw @ https://github.com/DuCanhGH/nixos-config (mandatory NixOS config drop)
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+      ```nix
+      {
+        inputs = {
+          nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+          # The `follows` keyword in inputs is used for inheritance.
+          # Here, `inputs.nixpkgs` of is kept consistent with the
+          # `inputs.nixpkgs` of the current flake,
+          # to avoid problems caused by different versions of nixpkgs.
+          home-manager = {
+            url = "github:nix-community/home-manager/master";
+            inputs.nixpkgs.follows = "nixpkgs";
+          };
+          lanzaboote = {
+            url = "github:nix-community/lanzaboote/v0.4.2";
+            inputs.nixpkgs.follows = "nixpkgs";
+          };
+        };
+        outputs = inputs@{ nixpkgs, home-manager, lanzaboote, ... }: {
+          nixosConfigurations.pneuma = nixpkgs.lib.nixosSystem {
+            system = "x86_64-linux";
+            specialArgs = { inherit inputs; };
+            modules = [
+              home-manager.nixosModules.home-manager
+              lanzaboote.nixosModules.lanzaboote
+              ./systems/pneuma/configuration.nix
+            ];
+          };
+          nixosConfigurations.ousia = nixpkgs.lib.nixosSystem {
+            system = "x86_64-linux";
+            specialArgs = { inherit inputs; };
+            modules = [
+              home-manager.nixosModules.home-manager
+              ./systems/ousia/configuration.nix
+            ];
+          };
+        };
+      }
+      ```
 
-```markdown
-Syntax highlighted code block
+- Relies on previous students who've gone through the pains of Git and Unix rather than professors (those who probably existed before Linux was even a thing and as such have way more experience with this) -> class feels more engaging and relatable.
 
-# Header 1
-## Header 2
-### Header 3
+- Reminded me to add my Purdue email to my GitHub account and claim the GitHub Student Developer Pack!
 
-- Bulleted
-- List
+## Not so favorite things about CS193:
 
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/kalutes/CS193_Fall18_Lab1/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+- Attendance quiz.
